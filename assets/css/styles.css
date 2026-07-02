@@ -148,6 +148,12 @@ summary.q::-webkit-details-marker{display:none}   /* hide default marker (Safari
   background:var(--warn-soft);border-left:3px solid var(--warn);
   padding:10px 14px;border-radius:8px;font-size:.9rem;margin-top:10px;
 }
+.eli5{
+  background:#eef3fb;border-left:3px solid #5b7fc4;
+  padding:10px 14px;border-radius:8px;font-size:.9rem;margin-top:12px;
+  color:#33436a;
+}
+.eli5-tag{font-weight:700;color:#3a5cad;margin-right:4px}
 
 /* Recap */
 .recap{

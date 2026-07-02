@@ -89,6 +89,18 @@ function buildCard(item) {
   const inner = document.createElement('div');
   inner.className = 'a-inner';
   inner.innerHTML = item.a; // authored/trusted HTML from data.json
+
+  // Optional kid-friendly explanation (plain text → textContent, no injection).
+  if (item.eli5) {
+    const eli5 = document.createElement('div');
+    eli5.className = 'eli5';
+    const tag = document.createElement('span');
+    tag.className = 'eli5-tag';
+    tag.textContent = '🧒 อธิบายง่ายๆ:';
+    eli5.append(tag, document.createTextNode(' ' + item.eli5));
+    inner.append(eli5);
+  }
+
   a.append(inner);
 
   details.append(summary, a);
