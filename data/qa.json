@@ -12,32 +12,32 @@
         {
           "q": "Hooks + functional component ต่างจาก class ยังไง?",
           "a": "<p>เขียน component เป็นฟังก์ชัน ใช้ <code>useState</code> เก็บ state, <code>useEffect</code> ทำ side effect (fetch, subscribe) แทน lifecycle method ของ class</p><ul><li><code>useEffect(fn, [deps])</code> — รันเมื่อ deps เปลี่ยน, return cleanup function กัน memory leak</li><li>reuse logic ด้วย custom hook (ดึง logic ออกมาเป็น <code>useXxx</code>)</li><li>โค้ดสั้นกว่า class, ไม่ต้องกังวล <code>this</code></li></ul>",
-          "eli5": "component = ชิ้นเลโก้. useState = กล่องความจำ ค่าเปลี่ยนภาพเปลี่ยนตาม. useEffect = สั่งให้ทำอะไรตอนภาพโผล่/เปลี่ยน"
+          "eli5": "หน้าเว็บสร้างจากชิ้นเลโก้เล็กๆ (component) เอามาต่อกันเป็นหน้าใหญ่ เมื่อก่อนเขียนแบบยาว (class) ตอนนี้เขียนเป็นฟังก์ชันสั้นๆ. useState = กล่องความจำ พอเปลี่ยนของในกล่อง หน้าจอวาดใหม่ให้เอง. useEffect = สั่งให้ทำอะไรตอนช่วงสำคัญ เช่น พอ component โผล่มาก็ไปโหลดข้อมูล"
         },
         {
           "q": "จัดการ state ข้าม component เลือกอะไร?",
           "a": "<ul><li><b>Redux</b> — app ใหญ่/ซับซ้อน มี devtools + middleware (Redux Toolkit ลด boilerplate) เหมาะ state ที่หลายที่ใช้ร่วม</li><li><b>Zustand</b> — เบา API ง่าย ไม่ต้อง provider/boilerplate เหมาะ app ขนาดกลาง</li><li><b>Context API</b> — built-in เหมาะ state เปลี่ยนไม่บ่อย (theme, auth, locale) ระวัง re-render ทั้ง tree ถ้า value เปลี่ยนบ่อย</li></ul>",
-          "eli5": "สมุดกลางที่ของเล่นทุกชิ้นเปิดดูได้ ไม่ต้องส่งต่อทีละมือ (Redux ใหญ่, Zustand เบา, Context ติดมากับ React)"
+          "eli5": "นึกว่าของเล่นหลายชิ้นต้องรู้คะแนนเดียวกัน ถ้าส่งกระดาษคะแนนต่อมือทีละคนจะวุ่น เลยมีสมุดคะแนนกลางที่ทุกชิ้นเปิดดูได้เลย. Redux = สมุดใหญ่กฎเยอะ เหมาะแอปใหญ่, Zustand = สมุดเล่มเล็กใช้ง่าย, Context = สมุดที่แถมมากับ React"
         },
         {
           "q": "React Router ใช้ทำอะไร?",
           "a": "<p>จัดการเปลี่ยนหน้า/URL ใน SPA โดยไม่ reload: <code>&lt;Routes&gt;/&lt;Route&gt;</code> map path → component, <code>useNavigate</code> เปลี่ยนหน้าใน code, <code>useParams</code> อ่าน dynamic param, nested route + layout, protected route กันหน้าที่ต้อง login</p>",
-          "eli5": "แผนที่ในบ้าน กดแล้วเปลี่ยนห้อง ไม่ต้องสร้างบ้านใหม่"
+          "eli5": "เว็บ SPA เหมือนบ้านหลังเดียวหลายห้อง. React Router = แผนที่ กดปุ๊บสลับห้องทันที ไม่ต้องทุบบ้านสร้างใหม่ (ไม่ reload) และ URL เปลี่ยนตามห้องที่อยู่"
         },
         {
           "q": "ใช้ component library ตัวไหน ทำไม?",
           "a": "<p>ใช้ UI สำเร็จรูป เช่น <b>MUI</b> หรือ <b>Ant Design</b> แทนเขียนเอง — ได้ component ที่ accessible + theming + responsive มาเลย ประหยัดเวลา สม่ำเสมอทั้งแอป เขียนเองเฉพาะส่วนที่ lib ไม่มี</p>",
-          "eli5": "กล่องเลโก้สำเร็จรูป หยิบมาต่อเลย ไม่ต้องปั้นเอง"
+          "eli5": "แทนที่จะปั้นปุ่ม/ตาราง/ฟอร์มเองทีละอัน มีกล่องชิ้นส่วนสำเร็จรูป (MUI, Ant Design) หยิบมาต่อได้เลย สวย ใช้ง่าย หน้าตาเหมือนกันทั้งแอป ประหยัดเวลา"
         },
         {
           "q": "ยิง API ไป backend ยังไง?",
           "a": "<p>ใช้ <code>fetch</code> หรือ <code>axios</code> (นิยม axios เพราะมี interceptor)</p><ul><li>interceptor แนบ token / auto-refresh, ตั้ง baseURL, จัดการ error กลาง</li><li>จัดการ loading / error / data state</li><li>ใช้ <code>react-query</code> / <code>SWR</code> ช่วย cache, refetch, dedupe request</li></ul>",
-          "eli5": "โทรสั่งพิซซ่า ครัว (backend) ทำให้ เราแค่รอรับ"
+          "eli5": "หน้าเว็บอยากได้ข้อมูลก็โทรไปสั่งที่ครัว (backend) เหมือนสั่งพิซซ่า ครัวทำเสร็จส่งกลับมา. axios เป็นโทรศัพท์ที่แนบบัตรผ่าน (token) ให้อัตโนมัติทุกครั้งที่โทร"
         },
         {
           "q": "ทำ responsive UI/UX ยังไง?",
           "a": "<p>คิดแบบ mobile-first, ใช้ CSS media query + flexbox/grid, กำหนด breakpoint, component lib มี grid/breakpoint system ให้, ทดสอบหลายขนาด device (DevTools device mode)</p>",
-          "eli5": "เสื้อยางยืด ใส่ได้ทั้งจอเล็กจอใหญ่"
+          "eli5": "เว็บต้องใส่ได้ทุกจอ เหมือนเสื้อยางยืดใส่ได้ทั้งเด็กเล็กเด็กโต จอมือถือเล็ก จอคอมใหญ่ ก็จัดของบนหน้าใหม่ให้พอดีเอง"
         }
       ]
     },
@@ -53,37 +53,37 @@
         {
           "q": "Authorization Code flow ทำงานยังไง?",
           "a": "<p>User → auth server → login → ได้ <code>code</code> กลับมา (ผ่าน redirect) → frontend เอา code ไปแลก <code>access_token</code> ที่ token endpoint แยก 2 ขั้นเพื่อไม่ให้ token โผล่บน URL</p>",
-          "eli5": "ได้คูปองก่อน แล้วเอาคูปองไปแลกตั๋วจริงทีหลัง ตั๋วเลยไม่โผล่ให้ใครเห็น"
+          "eli5": "ตอน login เราไม่ได้ 'บัตรผ่าน' (token) ทันที เราได้ 'คูปอง' (code) ก่อน แล้วเอาคูปองไปแลกบัตรผ่านตัวจริงอีกที ทำแบบนี้เพราะบัตรผ่านจะได้ไม่โผล่บน URL ให้คนแอบเห็น"
         },
         {
           "q": "PKCE คืออะไร แก้ปัญหาอะไร?",
           "a": "<p>SPA เก็บ <code>client_secret</code> ไม่ได้เพราะโค้ดอยู่ใน browser ทุกคนอ่านได้ PKCE แก้ด้วย:</p><ul><li>client สุ่ม <code>code_verifier</code> → hash (SHA256) เป็น <code>code_challenge</code> ส่งตอนขอ code</li><li>ตอนแลก token ส่ง <code>code_verifier</code> ตัวจริง</li><li>server เทียบ hash ตรงกันไหม</li></ul><p>ป้องกันคนดัก <code>code</code> เอาไปแลก token เพราะไม่มี verifier (เหมาะ public client)</p>",
-          "eli5": "เขียนรหัสลับไว้ในมือตัวเอง ใครขโมยคูปองไปก็แลกไม่ได้ เพราะไม่มีรหัสในมือ"
+          "eli5": "ปัญหา: ถ้ามีคนดักขโมยคูปอง (code) ไป เขาเอาไปแลกบัตรผ่านได้เลย. PKCE แก้โดย ตอนขอคูปองเราแอบเขียนรหัสลับไว้ในมือตัวเอง ตอนแลกบัตรต้องโชว์รหัสลับด้วย คนขโมยคูปองไปก็แลกไม่ได้ เพราะไม่มีรหัสลับในมือ"
         },
         {
           "q": "เก็บ token ที่ไหนใน browser ปลอดภัยสุด?",
           "a": "<ul><li><code>localStorage</code> — เสี่ยง XSS (JS อ่านได้)</li><li><code>httpOnly cookie</code> — JS อ่านไม่ได้ ปลอดภัยกว่า แต่เสี่ยง CSRF ต้องมี SameSite</li><li>นิยม: access token ใน memory + refresh token ใน httpOnly cookie</li></ul>",
-          "eli5": "เก็บตั๋วในกระเป๋าล็อกกุญแจ ปลอดภัยกว่าถือไว้ในมือให้คนแอบดู"
+          "eli5": "บัตรผ่าน (token) เก็บไว้ไหนดี? ถ้าวางในลิ้นชักที่สคริปต์ร้าย (XSS) เปิดอ่านได้ = อันตราย (localStorage). ถ้าเก็บในกระเป๋าล็อกกุญแจที่โค้ดฝั่งหน้าเว็บอ่านไม่ได้ (httpOnly cookie) = ปลอดภัยกว่า"
         },
         {
           "q": "access token กับ refresh token ต่างกันยังไง?",
           "a": "<ul><li>access token — อายุสั้น (นาที) ใช้เรียก API</li><li>refresh token — อายุยาว ใช้ขอ access token ใหม่โดยไม่ต้อง login ซ้ำ</li></ul>",
-          "eli5": "ตั๋ววันเดียว (access) กับ บัตรสมาชิกไว้ขอตั๋วใหม่ (refresh)"
+          "eli5": "มี 2 บัตร. access token = ตั๋วเข้าเล่นเครื่องเล่น อายุสั้นไม่กี่นาที. refresh token = บัตรสมาชิกอายุยาว เอาไว้ขอตั๋วใบใหม่เมื่อตั๋วเก่าหมด โดยไม่ต้อง login ใหม่"
         },
         {
           "q": "จัดการ secure redirect หลัง login ยังไง?",
           "a": "<ul><li>ใช้ <code>redirect_uri</code> ที่ whitelist ไว้ที่ auth server เท่านั้น (กัน open redirect)</li><li>ส่ง + validate <code>state</code> param กัน CSRF</li><li>เก็บ path ปลายทางที่ผู้ใช้ตั้งใจไป แล้ว redirect กลับหลัง login สำเร็จ</li></ul>",
-          "eli5": "หลังเข้าประตู พากลับบ้านถูกหลังเท่านั้น กันคนหลอกพาไปบ้านผิด"
+          "eli5": "หลัง login เสร็จ ระบบต้องพาเรากลับเว็บเดิม ต้องเช็คให้ดีว่าพากลับ 'บ้านที่ลงทะเบียนไว้' เท่านั้น กันคนร้ายหลอกพาไปเว็บปลอมเพื่อขโมยข้อมูล"
         },
         {
           "q": "Token refresh อัตโนมัติทำยังไง?",
           "a": "<p>ขอ access token ใหม่ด้วย refresh token เมื่อใกล้/หมดอายุ</p><ul><li>axios interceptor จับ <code>401</code> → refresh → retry request เดิม</li><li>ระวัง request หลายตัวพร้อมกัน — queue ไว้ให้ refresh ครั้งเดียว</li><li>lib (<code>oidc-client-ts</code>) มี silent renew ให้</li></ul>",
-          "eli5": "ตั๋วหมดอายุ เอาบัตรสมาชิกไปขอใบใหม่เอง ไม่ต้องเข้าคิว login ใหม่"
+          "eli5": "ตั๋ว (access token) หมดอายุบ่อย แทนที่จะให้ผู้ใช้ login ใหม่ทุกครั้ง ระบบแอบเอาบัตรสมาชิก (refresh token) ไปขอตั๋วใบใหม่ให้เองเงียบๆ เบื้องหลัง ผู้ใช้ใช้ต่อได้ลื่นไม่รู้ตัว"
         },
         {
           "q": "implement PKCE ใน React ยังไง?",
           "a": "<p>ใช้ client library เช่น <code>react-oauth</code> / <code>oidc-client-ts</code> จัดการ verifier/challenge/redirect/refresh ให้หมด ไม่ต้องเขียน crypto เอง config issuer, client_id, redirect_uri, scope แล้วมันดูแล flow ให้</p>",
-          "eli5": "มีของเล่นสำเร็จ (lib) ทำรหัสลับให้หมด เราไม่ต้องทำเอง"
+          "eli5": "รหัสลับ/การแลกคูปอง/การต่ออายุ พวกนี้ทำเองยุ่งและพลาดง่าย เลยใช้ของสำเร็จรูป (library เช่น oidc-client-ts) มันจัดการให้หมด เราแค่ใส่ค่า config"
         }
       ]
     },
@@ -96,27 +96,27 @@
         {
           "q": "Fiber ต่างจาก net/http ยังไง?",
           "a": "<p>Fiber build บน <code>fasthttp</code> ไม่ใช่ <code>net/http</code> เลยเร็วกว่าและ memory น้อยกว่า จุดสำคัญ: <code>*fiber.Ctx</code> ถูก reuse ระหว่าง request ห้ามเก็บ reference ไปใช้นอก handler เพราะข้อมูลจะถูกเขียนทับ ถ้าจะเก็บต้อง copy ค่าออกมาก่อน</p>",
-          "eli5": "รถซิ่ง ส่งของไว. แต่ที่นั่ง (Ctx) ใช้ซ้ำ อย่าเก็บของไว้ในนั้น เดี๋ยวคนใหม่มาทับ"
+          "eli5": "Fiber = เครื่องยนต์เว็บที่วิ่งเร็วเป็นพิเศษ. ข้อควรระวัง: 'ที่นั่ง' (Ctx) ที่ใส่ข้อมูลลูกค้าถูกใช้ซ้ำกับลูกค้าคนถัดไป ถ้าเราแอบเก็บของลูกค้าคนเก่าไว้ในที่นั่ง เดี๋ยวคนใหม่มานั่งทับ ข้อมูลปนกัน จะเก็บต้องก๊อปออกมาก่อน"
         },
         {
           "q": "Routing + Middleware ทำงานยังไง?",
           "a": "<p>Middleware เป็น chain เรียงกัน แต่ละตัวเรียก <code>c.Next()</code> เพื่อส่งต่อ ถ้าไม่เรียก = หยุด chain (เช่น auth ไม่ผ่าน return เลย) ใส่ได้ทั้ง global (<code>app.Use</code>) และเฉพาะ route/group</p>",
-          "eli5": "ด่านตรวจเรียงกัน ผ่านด่านนี้ค่อยไปด่านหน้า ถ้าไม่ผ่าน = หยุด"
+          "eli5": "middleware = ด่านตรวจก่อนถึงปลายทาง เรียงต่อกันเป็นแถว แต่ละด่านทำเสร็จเรียก c.Next() เพื่อส่งต่อด่านถัดไป ถ้าด่านไหนไม่ผ่าน (เช่นไม่มีบัตร) ก็หยุดตรงนั้น ไม่ให้ไปต่อ"
         },
         {
           "q": "middleware ecosystem ของ Fiber มีอะไรบ้าง?",
           "a": "<p>Fiber มี middleware สำเร็จใน <code>gofiber/fiber/v2/middleware/*</code> — import แล้ว <code>app.Use()</code> ได้เลย ไม่ต้องเขียนเอง:</p><ul><li><code>cors</code>, <code>compress</code>, <code>logger</code>, <code>recover</code> (กัน panic ล่ม), <code>limiter</code> (rate limit), <code>helmet</code> (security header)</li></ul>",
-          "eli5": "ด่านสำเร็จรูปมีให้ (ตรวจของ, บีบของให้เล็ก, จดบันทึก) หยิบมาใช้เลย"
+          "eli5": "ด่านตรวจยอดฮิตไม่ต้องสร้างเอง Fiber มีให้พร้อม เสียบใช้ได้เลย เช่น ด่านเช็คว่าใครขอข้ามเว็บได้ (cors), ด่านบีบข้อมูลให้เล็กส่งเร็วขึ้น (compress), ด่านจดบันทึกว่าใครเข้ามา (logger), ด่านกันแอปล่มเวลา error (recover)"
         },
         {
           "q": "Context handling ใน Fiber (c *fiber.Ctx)?",
           "a": "<p>อ่าน input ผ่าน <code>c.Params()</code>, <code>c.Query()</code>, <code>c.BodyParser(&amp;struct)</code>; ส่งข้อมูลข้าม middleware ด้วย <code>c.Locals()</code>; ตอบด้วย <code>c.JSON()</code> / <code>c.Status()</code> ระวัง <code>Ctx</code> ถูก reuse ต่อ request</p>",
-          "eli5": "ที่นั่งรถ (Ctx) มีช่องหยิบของที่ลูกค้าส่งมา + ช่องตอบกลับ"
+          "eli5": "'ที่นั่ง' (Ctx) คือที่รวมทุกอย่างของ request หนึ่งครั้ง — หยิบค่าจาก URL (c.Params, c.Query), อ่านข้อมูลที่ส่งมา (c.BodyParser), ฝากของให้ด่านถัดไป (c.Locals), และตอบกลับ (c.JSON)"
         },
         {
           "q": "จูน performance Fiber ยังไง?",
           "a": "<p>Fiber เร็วอยู่แล้วเพราะ fasthttp เพิ่มได้อีก: เปิด <code>Prefork</code> (หลาย process), ใช้ compression middleware, ตั้ง <code>BodyLimit</code>, เลี่ยง allocate เกินใน hot path, จูน connection pool ของ DB</p>",
-          "eli5": "รถเบา ของน้อย วิ่งเร็ว. เปิดหลายคัน (Prefork) ยิ่งเร็ว"
+          "eli5": "Fiber เร็วอยู่แล้ว อยากเร็วขึ้นอีก: เปิดหลายเครื่องยนต์ช่วยกันทำงาน (Prefork), บีบข้อมูลให้เล็ก, ไม่สร้างของใหม่ซ้ำๆ ในจุดที่ทำงานบ่อย, และปรับท่อต่อฐานข้อมูลให้พอดี"
         }
       ]
     },
@@ -129,32 +129,32 @@
         {
           "q": "Go modules จัดการ dependency ยังไง?",
           "a": "<ul><li><code>go.mod</code> — module path + Go version + <code>require</code> (dependency + version)</li><li><code>go.sum</code> — checksum ยืนยัน integrity</li><li><code>go get</code> เพิ่ม/อัปเดต, <code>go mod tidy</code> ลบที่ไม่ใช้ + เติมที่ขาด</li><li>ใช้ semantic versioning</li></ul>",
-          "eli5": "รายชื่อของเล่นที่ต้องมี + เบอร์รุ่น เขียนไว้ในสมุด (go.mod)"
+          "eli5": "โปรเจกต์ใช้ของคนอื่น (library) หลายอัน. go.mod = สมุดจดว่าใช้ของอะไรบ้างเวอร์ชันไหน, go.sum = ลายเซ็นยืนยันว่าของไม่ถูกสับเปลี่ยน, คำสั่ง go mod tidy ช่วยลบของที่ไม่ใช้แล้วและเติมของที่ขาด"
         },
         {
           "q": "ใช้ standard library อะไรบ่อย?",
           "a": "<p>Go เน้น stdlib แข็งแรง ไม่ต้องพึ่ง lib นอกมาก: <code>net/http</code>, <code>encoding/json</code>, <code>context</code>, <code>sync</code>, <code>io</code>, <code>time</code>, <code>database/sql</code>, <code>errors</code></p>",
-          "eli5": "กล่องเครื่องมือติดบ้านมาเยอะ ไม่ต้องไปยืมคนอื่นบ่อย"
+          "eli5": "Go แถมกล่องเครื่องมือมาในตัวเยอะและแข็งแรง — ทำเว็บ (net/http), อ่าน/เขียน JSON, จับเวลา, คุยฐานข้อมูล เลยไม่ต้องไปโหลดของคนอื่นมาเยอะเหมือนภาษาอื่น"
         },
         {
           "q": "Error handling แบบ Go ที่ดีเป็นยังไง?",
           "a": "<p>เช็ค <code>if err != nil</code> ทันที, wrap ด้วย <code>fmt.Errorf(\"...: %w\", err)</code> เพื่อเก็บ context, ใช้ <code>errors.Is</code> / <code>errors.As</code> เช็ค type แทนเทียบ string อย่า panic กับ error ปกติ</p>",
-          "eli5": "ของพังต้องบอกทันที ห้ามซ่อน แล้วแปะโน้ตว่าพังตรงไหน"
+          "eli5": "Go ให้เช็ค error ทุกครั้งทันทีที่เกิด (if err != nil) ห้ามเมิน เวลาส่ง error ต่อขึ้นไปให้แปะโน้ตว่าพังตอนทำอะไร (wrap) จะได้ตามรอยง่ายว่าพังตรงไหน"
         },
         {
           "q": "context.Context ใช้ทำอะไร?",
           "a": "<p>ส่ง cancellation, timeout, deadline และ request-scoped value ข้าม layer เช่น ตั้ง timeout query DB หรือยกเลิกงานเมื่อ client ตัดการเชื่อมต่อ ควรรับ <code>ctx</code> เป็น parameter ตัวแรกเสมอ</p>",
-          "eli5": "นาฬิกาจับเวลา หมดเวลา/ยกเลิก แล้วเลิกทำเลย"
+          "eli5": "context = นาฬิกาจับเวลา + สวิตช์ยกเลิก ที่ส่งต่อกันไปทุกชั้นงาน เช่น query ฐานข้อมูลนานเกิน 3 วิให้เลิก หรือลูกค้าปิดหน้าจอไปแล้วก็ยกเลิกงานที่ค้าง ไม่ทำต่อให้เปลืองแรง"
         },
         {
           "q": "goroutine leak เกิดจากอะไร ป้องกันยังไง?",
           "a": "<p>เกิดเมื่อ goroutine รอ channel ที่ไม่มีวันได้ค่า หรือไม่มีทางออก ป้องกันด้วย <code>context</code> cancel, ปิด channel ให้ถูก, ใช้ <code>sync.WaitGroup</code> รอให้จบ</p>",
-          "eli5": "คนช่วยงานหลายคน; leak = ลืมคนไว้ในห้อง ไม่เรียกออก ห้องเลยเต็ม"
+          "eli5": "goroutine = ลูกน้องที่แยกไปทำงานพร้อมกันหลายคน. leak = สั่งลูกน้องไปรอของที่ไม่มีวันมา แล้วลืมเรียกกลับ ลูกน้องค้างเรื่อยๆ สะสมจนหน่วยความจำเต็ม กันด้วยการมีทางให้เขาเลิก (context ยกเลิก, ปิด channel)"
         },
         {
           "q": "slice กับ array ต่างกันยังไง?",
           "a": "<p>array ขนาดคงที่ (เป็นส่วนหนึ่งของ type), slice เป็น view ชี้ไป underlying array มี len/cap ขยายด้วย <code>append</code> ระวัง: หลาย slice อาจ share array เดียวกัน แก้ตัวนึงกระทบอีกตัว</p>",
-          "eli5": "array = กล่องขนาดตายตัว; slice = ที่คั่นชี้เข้าไปในกล่อง ยืดได้ แต่หลายที่คั่นชี้กล่องเดียวกัน แก้อันนึงกระทบอันอื่น"
+          "eli5": "array = กล่องขนาดตายตัว ใส่ได้เท่าที่กำหนด. slice = ที่คั่นหนังสือที่ชี้เข้าไปในกล่อง ขยายได้. ระวัง: ถ้ามีที่คั่นหลายอันชี้กล่องใบเดียวกัน แก้ของผ่านอันนึง อีกอันก็เห็นการเปลี่ยนด้วย"
         }
       ]
     },
@@ -170,17 +170,17 @@
         {
           "q": "fosite ต่างจาก golang.org/x/oauth2 ยังไง?",
           "a": "<ul><li><code>x/oauth2</code> = <b>client</b> เราไปขอ token จาก provider อื่น (Google, Keycloak)</li><li><code>fosite</code> = <b>server/provider</b> เราออก token เอง เป็น OAuth server เอง</li></ul>",
-          "eli5": "x/oauth2 = เราไปขอตั๋วสวนสนุกคนอื่น. fosite = เราเปิดสวนสนุกเอง ออกตั๋วเอง"
+          "eli5": "เรื่อง OAuth มี 2 ฝั่ง. x/oauth2 = เราเป็น 'ลูกค้า' ไปขอบัตรผ่านจากสวนสนุกคนอื่น (เช่น login ด้วย Google). fosite = เราเป็น 'เจ้าของสวนสนุก' ออกบัตรผ่านให้คนอื่นเอง"
         },
         {
           "q": "ทำไมต้องใช้ fosite ไม่ใช้ Keycloak?",
           "a": "<p>ถ้าต้องการคุม flow เอง ฝัง OAuth server ในแอป หรือมี business logic เฉพาะที่ Keycloak ทำไม่ได้ แต่แลกมาด้วย config ที่ซับซ้อนและต้อง implement <code>Storage</code> interface เอง (เก็บ client, token, code)</p>",
-          "eli5": "อยากคุมสวนสนุกเองทุกอย่าง เลยสร้างเอง แต่ต้องทำเยอะกว่า"
+          "eli5": "Keycloak = สวนสนุกสำเร็จรูปซื้อมาตั้งได้เลย. fosite = ชุดอุปกรณ์สร้างสวนสนุกเอง เลือก fosite เมื่ออยากคุมทุกอย่างเอง หรือมีกฎพิเศษที่ของสำเร็จรูปทำไม่ได้ แต่แลกกับต้องประกอบเองเยอะ"
         },
         {
           "q": "fosite ต้องเขียนอะไรเองบ้าง?",
           "a": "<p>implement storage layer เอง (เก็บใน PostgreSQL/Redis), กำหนด strategy (JWT หรือ opaque token), config grant type ที่รองรับ fosite เน้น security by default แต่ต้อง wire เยอะ</p><div class=\"note\">ถ้าไม่เคยใช้จริง ตอบตรงๆ: \"เข้าใจว่ามันคือ OAuth provider library ที่ต้อง implement storage เอง แต่ยังไม่เคยใช้ production พร้อมเรียนรู้\"</div>",
-          "eli5": "ต้องทำตู้เก็บตั๋ว/คูปองเอง (storage) fosite ไม่ทำให้"
+          "eli5": "fosite ไม่ได้ให้ตู้เก็บของมาด้วย เราต้องทำ 'ตู้เก็บ' บัตรผ่าน/คูปอง/ข้อมูลลูกค้าเอง (เก็บลง PostgreSQL หรือ Redis) และตั้งค่าว่าจะออกบัตรแบบไหน มันเน้นปลอดภัยแต่ต้องต่อสายเองเยอะ"
         }
       ]
     },
@@ -196,22 +196,22 @@
         {
           "q": "เลือก MongoDB แทน PostgreSQL ตอนไหน?",
           "a": "<ul><li>Mongo — schema ยืดหยุ่น, data nested/document, scale horizontal ง่าย, write เยอะ</li><li>Postgres — relation ชัด, ACID, JOIN ซับซ้อน, ต้องการ consistency สูง</li></ul>",
-          "eli5": "Mongo = กล่องใส่อะไรก็ได้ ไม่ต้องเรียง. Postgres = ตู้ลิ้นชักมีช่องตายตัว เรียบร้อย"
+          "eli5": "MongoDB = กล่องใหญ่โยนของใส่แบบไหนก็ได้ ไม่ต้องจัดเรียง เหมาะข้อมูลรูปแบบไม่แน่นอนและโตง่าย. PostgreSQL = ตู้ลิ้นชักมีช่องตายตัว จัดระเบียบ เชื่อมโยงข้อมูลกันได้ดี เหมาะงานที่ต้องเป๊ะเช่นเงิน/บัญชี"
         },
         {
           "q": "mongo-driver ใน Go ใช้ยังไงคร่าวๆ?",
           "a": "<p><code>client.Database().Collection()</code> แล้วเรียก <code>InsertOne</code>, <code>Find</code>, <code>UpdateOne</code> ผลลัพธ์ decode เข้า struct ด้วย bson tag ใช้ <code>context</code> กับทุก operation</p>",
-          "eli5": "เปิดกล่อง (collection) แล้วใส่/หา/แก้ของ ทุกครั้งถือนาฬิกา (context) ไปด้วย"
+          "eli5": "วิธีคุย MongoDB จาก Go: เปิดกล่องเก็บของ (collection) แล้วสั่งใส่ของ (Insert), หาของ (Find), แก้ของ (Update) ผลลัพธ์แปลงกลับเป็น struct ของเรา และถือนาฬิกา (context) ไปด้วยทุกครั้ง"
         },
         {
           "q": "GORM มีข้อควรระวังอะไร?",
           "a": "<ul><li>N+1 query — ใช้ <code>Preload</code> โหลด relation ทีเดียว</li><li>ระวัง auto-migration ใน production</li><li>ใช้ <code>Select</code> เลือก column ที่ต้องใช้ ไม่ดึงทั้ง table</li><li>transaction ใช้ <code>db.Transaction(func(tx))</code></li></ul>",
-          "eli5": "อย่าถามทีละคน (ช้า) ใช้ Preload ถามทีเดียวทั้งห้อง"
+          "eli5": "GORM = ล่ามแปลระหว่างโค้ด Go กับฐานข้อมูล. กับดักที่เจอบ่อย: ดึงรายการมา 10 อัน แล้ววิ่งถามรายละเอียดทีละอัน = 11 คำถาม ช้ามาก (N+1) แก้ด้วย Preload สั่งดึงมาทีเดียวจบ"
         },
         {
           "q": "เรียก external API จาก Go (HTTP client) ยังไง?",
           "a": "<p>ใช้ <code>net/http</code>: reuse <code>http.Client</code> ตัวเดียว (อย่าสร้างใหม่ทุก request), ตั้ง <code>Timeout</code>, ส่ง <code>context</code> ด้วย <code>http.NewRequestWithContext</code>, <code>defer resp.Body.Close()</code> เสมอ, จัดการ retry/backoff เมื่อ fail</p>",
-          "eli5": "โทรหาเพื่อนบ้าน (API คนอื่น) ใช้โทรศัพท์เครื่องเดิม ตั้งเวลาวางสายถ้ารอนาน"
+          "eli5": "เวลา Go ต้องไปขอข้อมูลจากเซิร์ฟเวอร์อื่น (เรียก API เขา) เหมือนโทรหาเพื่อนบ้าน ควรใช้โทรศัพท์เครื่องเดิมซ้ำ (reuse client) และตั้งเวลาว่าถ้าโทรไปไม่รับเกินกี่วิให้วางสาย (timeout) กันค้าง"
         }
       ]
     },
@@ -224,17 +224,17 @@
         {
           "q": "เขียน test ใน Go แบบไหน?",
           "a": "<p>Table-driven test — เก็บ test case เป็น slice ของ struct แล้ว loop ผ่าน <code>t.Run()</code> อ่านง่าย เพิ่ม case ง่าย ใช้ <code>testify/assert</code> ช่วย assert</p>",
-          "eli5": "ทำตารางข้อสอบหลายข้อ แล้วตรวจทีละข้อ"
+          "eli5": "เทสต์ = ลองใช้โค้ดก่อนว่าทำงานถูกไหม แบบยอดนิยมใน Go: ทำตารางรวมหลายกรณี (ใส่อะไรเข้าไป → ควรได้อะไรออกมา) แล้ววนตรวจทีละแถว เพิ่มกรณีใหม่ง่าย อ่านง่าย"
         },
         {
           "q": "testify กับ ginkgo ต่างกันยังไง?",
           "a": "<ul><li><b>testify</b> — assertion + mock lib ใช้กับ <code>testing</code> มาตรฐาน + table-driven เขียนง่าย ตรงไปตรงมา</li><li><b>ginkgo</b> — BDD framework (<code>Describe</code>/<code>Context</code>/<code>It</code>) คู่กับ <code>gomega</code> เหมาะ test ที่อยากอ่านเป็นสเปค เลือกตาม convention ทีม</li></ul>",
-          "eli5": "testify = ตรวจแบบตรงๆ. ginkgo = เขียนเป็นนิทาน “ถ้า...ควรจะ...”"
+          "eli5": "2 เครื่องมือช่วยเทสต์. testify = ตรวจคำตอบแบบตรงๆ สั้นๆ (เช่น 'ค่านี้ต้องเท่ากับ 5'). ginkgo = เขียนเทสต์เป็นประโยคเล่าเรื่อง 'เมื่อ...ควรจะ...' อ่านเหมือนสเปค เลือกใช้ตามที่ทีมถนัด"
         },
         {
           "q": "mock dependency ยังไง?",
           "a": "<p>ออกแบบเป็น interface แล้ว inject mock ตอน test (clean architecture ช่วยตรงนี้ — repository เป็น interface, service รับ interface)</p>",
-          "eli5": "ซ้อมด้วยของเล่นปลอมแทนของจริง จะได้ไม่พังของจริง"
+          "eli5": "บางทีโค้ดต้องคุยกับฐานข้อมูลจริง/เซิร์ฟเวอร์จริง ซึ่งช้าและเสี่ยงพังของจริง ตอนเทสต์เลยใช้ 'ของปลอม' (mock) มาสวมแทน ทำให้เทสต์เร็วและปลอดภัย ออกแบบโค้ดเป็น interface ไว้จะสลับของปลอมเข้าง่าย"
         }
       ]
     },
@@ -250,22 +250,22 @@
         {
           "q": "ACL คืออะไร ต่างจาก RBAC ยังไง?",
           "a": "<p><b>ACL</b> (Access Control List) = ผูกสิทธิ์กับ resource รายตัว — \"user X ทำ action Y บน resource Z ได้ไหม\" ตรงไปตรงมา fine-grained per-object แต่ scale ยากเมื่อ user/resource เยอะ (entry บานปลาย) RBAC จัดกลุ่มด้วย role เลยลด entry ลง</p>",
-          "eli5": "รายชื่อทีละคนว่าใครแตะของชิ้นไหนได้ ยิ่งคนเยอะลิสต์ยิ่งยาว"
+          "eli5": "ACL = บัญชีรายชื่อระบุทีละคู่ว่า 'ใคร ทำอะไร กับของชิ้นไหน ได้บ้าง' ละเอียดดี แต่พอคนเยอะของเยอะ รายการยาวมากจนดูแลไม่ไหว RBAC เลยมาช่วยจัดกลุ่มด้วย 'ตำแหน่ง' ให้สั้นลง"
         },
         {
           "q": "RBAC กับ ABAC ต่างกันยังไง เลือกใช้ตอนไหน?",
           "a": "<ul><li><b>RBAC</b> — สิทธิ์ตาม role (admin/user/manager) ง่าย เหมาะสิทธิ์ตายตัว</li><li><b>ABAC</b> — สิทธิ์ตาม attribute (แผนก เวลา เจ้าของข้อมูล) ยืดหยุ่น เช่น \"แก้ได้เฉพาะเอกสารแผนกตัวเอง ในเวลาทำการ\"</li><li>จริงมักใช้ผสม: RBAC เป็นฐาน + ABAC เสริมเงื่อนไข</li></ul>",
-          "eli5": "RBAC = ป้ายสี ครูแดง/นักเรียนฟ้า เข้าตามสี. ABAC = กฎยืดหยุ่น “ห้องตัวเอง + ในเวลาเรียน”"
+          "eli5": "RBAC = ให้สิทธิ์ตาม 'ป้ายตำแหน่ง' เช่นครูเข้าห้องพักครูได้ นักเรียนไม่ได้ — ง่ายและตายตัว. ABAC = ให้สิทธิ์ตาม 'เงื่อนไข' ยืดหยุ่นกว่า เช่น 'แก้เอกสารได้เฉพาะของแผนกตัวเอง และเฉพาะในเวลาทำงาน' จริงมักใช้ผสมกัน"
         },
         {
           "q": "ออกแบบ permission system ยังไง?",
           "a": "<p>แยก user → role → permission (many-to-many) เก็บใน DB สำหรับ ABAC ใช้ policy engine (เช่น CEL) eval เงื่อนไขตอน runtime cache permission ไว้ลด query</p>",
-          "eli5": "จับคู่ คน↔ป้าย↔สิ่งที่ทำได้ เก็บในสมุด แล้วจำไว้ (cache) จะได้ไม่ถามซ้ำ"
+          "eli5": "ออกแบบ: จับคู่ คน → ตำแหน่ง → สิทธิ์ที่ทำได้ เก็บในฐานข้อมูล แล้วจำผลไว้ (cache) จะได้ไม่ต้องถามฐานข้อมูลซ้ำทุกครั้ง เร็วขึ้น"
         },
         {
           "q": "policy engine (CEL) ช่วยอะไร?",
           "a": "<p>เขียน rule เป็น expression เก็บใน DB แก้ได้โดยไม่ต้อง deploy code ใหม่ เช่น <code>user.dept == resource.dept &amp;&amp; request.time.hour &lt; 18</code></p>",
-          "eli5": "เขียนกฎเป็นประโยคเก็บในสมุด แก้กฎได้เลยไม่ต้องสร้างบ้านใหม่"
+          "eli5": "policy engine = ระบบที่ให้เราเขียน 'กฎ' เป็นประโยคเก็บไว้ แล้วแก้กฎได้เลยโดยไม่ต้องแก้โค้ดและ deploy ใหม่ เช่นกฎ 'แผนกตรงกัน และก่อน 6 โมงเย็น ถึงจะทำได้'"
         }
       ]
     },
@@ -278,17 +278,17 @@
         {
           "q": "JWT ปลอดภัยแค่ไหน? ใส่อะไรได้บ้าง?",
           "a": "<p>JWT แค่ <b>signed ไม่ได้ encrypt</b> ใครก็ decode อ่าน payload ได้ ห้ามใส่ข้อมูล sensitive (password, เลขบัตร) ที่ปลอดภัยคือ \"แก้ไม่ได้\" เพราะ signature (ใน Go ใช้ <code>golang-jwt/jwt</code>)</p>",
-          "eli5": "สายรัดข้อมือปั๊มชื่อเรา แก้ไม่ได้ แต่ใครก็อ่านได้ → อย่าเขียนความลับลงไป"
+          "eli5": "JWT = สายรัดข้อมือที่ปั๊มตราแน่น ใครแกะไปแก้ชื่อไม่ได้ (มีลายเซ็น) — ดี. แต่ทุกคนเปิดอ่านสิ่งที่เขียนบนสายได้ เลยห้ามเขียนความลับ (รหัสผ่าน/เลขบัตร) ลงไป"
         },
         {
           "q": "ยกเลิก JWT ก่อนหมดอายุยังไง?",
           "a": "<p>JWT stateless ยกเลิกตรงๆ ไม่ได้ วิธีแก้:</p><ul><li>blocklist ใน Redis (เก็บ jti ที่ถูก revoke)</li><li>token version ใน DB (เปลี่ยน version = token เก่าใช้ไม่ได้)</li><li>ตั้ง expiry สั้น + ใช้ refresh token</li></ul>",
-          "eli5": "สายรัดยกเลิกยาก ต้องมีลิสต์ดำ (ห้ามใบนี้) หรือทำใบอายุสั้นๆ"
+          "eli5": "ปัญหา: สายรัด (JWT) ยกเลิกกลางคันยาก เพราะระบบไม่ได้จำว่าออกใบไหนไป. วิธีแก้: ทำบัญชีดำเก็บใบที่แบน (Redis), หรือเปลี่ยนเลขเวอร์ชันให้ใบเก่าใช้ไม่ได้, หรือออกใบอายุสั้นๆ แล้วต่อบ่อยๆ"
         },
         {
           "q": "JWT signature มีกี่แบบ?",
           "a": "<ul><li>HS256 — symmetric ใช้ secret เดียว sign/verify เหมาะระบบเดียว</li><li>RS256 — asymmetric sign ด้วย private key verify ด้วย public key เหมาะหลาย service</li></ul>",
-          "eli5": "HS256 = กุญแจดอกเดียวล็อก+ไข. RS256 = ล็อกด้วยกุญแจลับ ไขด้วยกุญแจสาธารณะ"
+          "eli5": "วิธีเซ็นลายเซ็นบน JWT. HS256 = กุญแจดอกเดียวใช้ทั้งล็อกและไข เหมาะระบบเดียวที่ถือกุญแจร่วมกัน. RS256 = ล็อกด้วยกุญแจลับ (private) แต่ไขตรวจด้วยกุญแจสาธารณะ (public) เหมาะหลายระบบที่ต้องตรวจแต่ไม่ต้องออกเอง"
         }
       ]
     },
