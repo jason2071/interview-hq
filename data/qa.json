@@ -3,6 +3,74 @@
     {
       "id": "s1",
       "num": "01",
+      "title": "React / Frontend",
+      "tag": { "class": "must", "label": "ต้องเตรียม" },
+      "items": [
+        {
+          "q": "Hooks + functional component ต่างจาก class ยังไง?",
+          "a": "<p>เขียน component เป็นฟังก์ชัน ใช้ <code>useState</code> เก็บ state, <code>useEffect</code> ทำ side effect (fetch, subscribe) แทน lifecycle method ของ class</p><ul><li><code>useEffect(fn, [deps])</code> — รันเมื่อ deps เปลี่ยน, return cleanup function กัน memory leak</li><li>reuse logic ด้วย custom hook (ดึง logic ออกมาเป็น <code>useXxx</code>)</li><li>โค้ดสั้นกว่า class, ไม่ต้องกังวล <code>this</code></li></ul>"
+        },
+        {
+          "q": "จัดการ state ข้าม component เลือกอะไร?",
+          "a": "<ul><li><b>Redux</b> — app ใหญ่/ซับซ้อน มี devtools + middleware (Redux Toolkit ลด boilerplate) เหมาะ state ที่หลายที่ใช้ร่วม</li><li><b>Zustand</b> — เบา API ง่าย ไม่ต้อง provider/boilerplate เหมาะ-medium app</li><li><b>Context API</b> — built-in เหมาะ state เปลี่ยนไม่บ่อย (theme, auth, locale) ระวัง re-render ทั้ง tree ถ้า value เปลี่ยนบ่อย</li></ul>"
+        },
+        {
+          "q": "React Router ใช้ทำอะไร?",
+          "a": "<p>จัดการเปลี่ยนหน้า/URL ใน SPA โดยไม่ reload: <code>&lt;Routes&gt;/&lt;Route&gt;</code> map path → component, <code>useNavigate</code> เปลี่ยนหน้าใน code, <code>useParams</code> อ่าน dynamic param, nested route + layout, protected route กันหน้าที่ต้อง login</p>"
+        },
+        {
+          "q": "ใช้ component library ตัวไหน ทำไม?",
+          "a": "<p>ใช้ UI สำเร็จรูป เช่น <b>MUI</b> หรือ <b>Ant Design</b> แทนเขียนเอง — ได้ component ที่ accessible + theming + responsive มาเลย ประหยัดเวลา สม่ำเสมอทั้งแอป เขียนเองเฉพาะส่วนที่ lib ไม่มี</p>"
+        },
+        {
+          "q": "ยิง API ไป backend ยังไง?",
+          "a": "<p>ใช้ <code>fetch</code> หรือ <code>axios</code> (นิยม axios เพราะมี interceptor)</p><ul><li>interceptor แนบ token / auto-refresh, ตั้ง baseURL, จัดการ error กลาง</li><li>จัดการ loading / error / data state</li><li>ใช้ <code>react-query</code> / <code>SWR</code> ช่วย cache, refetch, dedupe request</li></ul>"
+        },
+        {
+          "q": "ทำ responsive UI/UX ยังไง?",
+          "a": "<p>คิดแบบ mobile-first, ใช้ CSS media query + flexbox/grid, กำหนด breakpoint, component lib มี grid/breakpoint system ให้, ทดสอบหลายขนาด device (DevTools device mode)</p>"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "num": "02",
+      "title": "OAuth 2.0 / PKCE (Frontend)",
+      "tag": { "class": "must", "label": "ต้องเตรียม" },
+      "items": [
+        {
+          "q": "Authorization Code flow ทำงานยังไง?",
+          "a": "<p>User → auth server → login → ได้ <code>code</code> กลับมา (ผ่าน redirect) → frontend เอา code ไปแลก <code>access_token</code> ที่ token endpoint แยก 2 ขั้นเพื่อไม่ให้ token โผล่บน URL</p>"
+        },
+        {
+          "q": "PKCE คืออะไร แก้ปัญหาอะไร?",
+          "a": "<p>SPA เก็บ <code>client_secret</code> ไม่ได้เพราะโค้ดอยู่ใน browser ทุกคนอ่านได้ PKCE แก้ด้วย:</p><ul><li>client สุ่ม <code>code_verifier</code> → hash (SHA256) เป็น <code>code_challenge</code> ส่งตอนขอ code</li><li>ตอนแลก token ส่ง <code>code_verifier</code> ตัวจริง</li><li>server เทียบ hash ตรงกันไหม</li></ul><p>ป้องกันคนดัก <code>code</code> เอาไปแลก token เพราะไม่มี verifier (เหมาะ public client)</p>"
+        },
+        {
+          "q": "เก็บ token ที่ไหนใน browser ปลอดภัยสุด?",
+          "a": "<ul><li><code>localStorage</code> — เสี่ยง XSS (JS อ่านได้)</li><li><code>httpOnly cookie</code> — JS อ่านไม่ได้ ปลอดภัยกว่า แต่เสี่ยง CSRF ต้องมี SameSite</li><li>นิยม: access token ใน memory + refresh token ใน httpOnly cookie</li></ul>"
+        },
+        {
+          "q": "access token กับ refresh token ต่างกันยังไง?",
+          "a": "<ul><li>access token — อายุสั้น (นาที) ใช้เรียก API</li><li>refresh token — อายุยาว ใช้ขอ access token ใหม่โดยไม่ต้อง login ซ้ำ</li></ul>"
+        },
+        {
+          "q": "จัดการ secure redirect หลัง login ยังไง?",
+          "a": "<ul><li>ใช้ <code>redirect_uri</code> ที่ whitelist ไว้ที่ auth server เท่านั้น (กัน open redirect)</li><li>ส่ง + validate <code>state</code> param กัน CSRF</li><li>เก็บ path ปลายทางที่ผู้ใช้ตั้งใจไป แล้ว redirect กลับหลัง login สำเร็จ</li></ul>"
+        },
+        {
+          "q": "Token refresh อัตโนมัติทำยังไง?",
+          "a": "<p>ขอ access token ใหม่ด้วย refresh token เมื่อใกล้/หมดอายุ</p><ul><li>axios interceptor จับ <code>401</code> → refresh → retry request เดิม</li><li>ระวัง request หลายตัวพร้อมกัน — queue ไว้ให้ refresh ครั้งเดียว</li><li>lib (<code>oidc-client-ts</code>) มี silent renew ให้</li></ul>"
+        },
+        {
+          "q": "implement PKCE ใน React ยังไง?",
+          "a": "<p>ใช้ client library เช่น <code>react-oauth</code> / <code>oidc-client-ts</code> จัดการ verifier/challenge/redirect/refresh ให้หมด ไม่ต้องเขียน crypto เอง config issuer, client_id, redirect_uri, scope แล้วมันดูแล flow ให้</p>"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "num": "03",
       "title": "Go Fiber",
       "tag": null,
       "items": [
@@ -11,25 +79,37 @@
           "a": "<p>Fiber build บน <code>fasthttp</code> ไม่ใช่ <code>net/http</code> เลยเร็วกว่าและ memory น้อยกว่า จุดสำคัญ: <code>*fiber.Ctx</code> ถูก reuse ระหว่าง request ห้ามเก็บ reference ไปใช้นอก handler เพราะข้อมูลจะถูกเขียนทับ ถ้าจะเก็บต้อง copy ค่าออกมาก่อน</p>"
         },
         {
-          "q": "Middleware ทำงานยังไง?",
-          "a": "<p>เป็น chain เรียงกัน แต่ละตัวเรียก <code>c.Next()</code> เพื่อส่งต่อ ถ้าไม่เรียก = หยุด chain (เช่น auth ไม่ผ่าน return เลย) ใส่ได้ทั้ง global (<code>app.Use</code>) และเฉพาะ route</p>"
+          "q": "Routing + Middleware ทำงานยังไง?",
+          "a": "<p>Middleware เป็น chain เรียงกัน แต่ละตัวเรียก <code>c.Next()</code> เพื่อส่งต่อ ถ้าไม่เรียก = หยุด chain (เช่น auth ไม่ผ่าน return เลย) ใส่ได้ทั้ง global (<code>app.Use</code>) และเฉพาะ route/group</p>"
         },
         {
-          "q": "จัดการ error ใน Fiber ยังไง?",
-          "a": "<p>return <code>error</code> จาก handler แล้วใช้ custom <code>ErrorHandler</code> กลางจับทั้งหมด ทำให้ error format เหมือนกันทั้ง API ไม่ต้อง <code>c.Status().JSON()</code> ซ้ำทุกที่</p>"
+          "q": "middleware ecosystem ของ Fiber มีอะไรบ้าง?",
+          "a": "<p>Fiber มี middleware สำเร็จใน <code>gofiber/fiber/v2/middleware/*</code> — import แล้ว <code>app.Use()</code> ได้เลย ไม่ต้องเขียนเอง:</p><ul><li><code>cors</code>, <code>compress</code>, <code>logger</code>, <code>recover</code> (กัน panic ล่ม), <code>limiter</code> (rate limit), <code>helmet</code> (security header)</li></ul>"
+        },
+        {
+          "q": "Context handling ใน Fiber (c *fiber.Ctx)?",
+          "a": "<p>อ่าน input ผ่าน <code>c.Params()</code>, <code>c.Query()</code>, <code>c.BodyParser(&amp;struct)</code>; ส่งข้อมูลข้าม middleware ด้วย <code>c.Locals()</code>; ตอบด้วย <code>c.JSON()</code> / <code>c.Status()</code> ระวัง <code>Ctx</code> ถูก reuse ต่อ request</p>"
         },
         {
           "q": "จูน performance Fiber ยังไง?",
-          "a": "<p>เปิด <code>Prefork</code> (หลาย process), ใช้ compression middleware, ตั้ง <code>BodyLimit</code>, เลี่ยง allocate เกินใน hot path, จูน connection pool ของ DB</p>"
+          "a": "<p>Fiber เร็วอยู่แล้วเพราะ fasthttp เพิ่มได้อีก: เปิด <code>Prefork</code> (หลาย process), ใช้ compression middleware, ตั้ง <code>BodyLimit</code>, เลี่ยง allocate เกินใน hot path, จูน connection pool ของ DB</p>"
         }
       ]
     },
     {
-      "id": "s2",
-      "num": "02",
+      "id": "s4",
+      "num": "04",
       "title": "Go Ecosystem",
       "tag": null,
       "items": [
+        {
+          "q": "Go modules จัดการ dependency ยังไง?",
+          "a": "<ul><li><code>go.mod</code> — module path + Go version + <code>require</code> (dependency + version)</li><li><code>go.sum</code> — checksum ยืนยัน integrity</li><li><code>go get</code> เพิ่ม/อัปเดต, <code>go mod tidy</code> ลบที่ไม่ใช้ + เติมที่ขาด</li><li>ใช้ semantic versioning</li></ul>"
+        },
+        {
+          "q": "ใช้ standard library อะไรบ่อย?",
+          "a": "<p>Go เน้น stdlib แข็งแรง ไม่ต้องพึ่ง lib นอกมาก: <code>net/http</code>, <code>encoding/json</code>, <code>context</code>, <code>sync</code>, <code>io</code>, <code>time</code>, <code>database/sql</code>, <code>errors</code></p>"
+        },
         {
           "q": "Error handling แบบ Go ที่ดีเป็นยังไง?",
           "a": "<p>เช็ค <code>if err != nil</code> ทันที, wrap ด้วย <code>fmt.Errorf(\"...: %w\", err)</code> เพื่อเก็บ context, ใช้ <code>errors.Is</code> / <code>errors.As</code> เช็ค type แทนเทียบ string อย่า panic กับ error ปกติ</p>"
@@ -49,36 +129,8 @@
       ]
     },
     {
-      "id": "s3",
-      "num": "03",
-      "title": "OAuth 2.0 / PKCE",
-      "tag": { "class": "must", "label": "ต้องเตรียม" },
-      "items": [
-        {
-          "q": "Authorization Code flow ทำงานยังไง?",
-          "a": "<p>User → auth server → login → ได้ <code>code</code> กลับมา (ผ่าน redirect) → frontend เอา code ไปแลก <code>access_token</code> ที่ token endpoint แยก 2 ขั้นเพื่อไม่ให้ token โผล่บน URL</p>"
-        },
-        {
-          "q": "PKCE คืออะไร แก้ปัญหาอะไร?",
-          "a": "<p>SPA เก็บ <code>client_secret</code> ไม่ได้เพราะโค้ดอยู่ใน browser ทุกคนอ่านได้ PKCE แก้ด้วย:</p><ul><li>client สุ่ม <code>code_verifier</code> → hash (SHA256) เป็น <code>code_challenge</code> ส่งตอนขอ code</li><li>ตอนแลก token ส่ง <code>code_verifier</code> ตัวจริง</li><li>server เทียบ hash ตรงกันไหม</li></ul><p>ป้องกันคนดัก <code>code</code> เอาไปแลก token เพราะไม่มี verifier</p>"
-        },
-        {
-          "q": "เก็บ token ที่ไหนใน browser ปลอดภัยสุด?",
-          "a": "<ul><li><code>localStorage</code> — เสี่ยง XSS (JS อ่านได้)</li><li><code>httpOnly cookie</code> — JS อ่านไม่ได้ ปลอดภัยกว่า แต่เสี่ยง CSRF ต้องมี SameSite</li><li>นิยม: access token ใน memory + refresh token ใน httpOnly cookie</li></ul>"
-        },
-        {
-          "q": "access token กับ refresh token ต่างกันยังไง?",
-          "a": "<ul><li>access token — อายุสั้น (นาที) ใช้เรียก API</li><li>refresh token — อายุยาว ใช้ขอ access token ใหม่โดยไม่ต้อง login ซ้ำ</li></ul>"
-        },
-        {
-          "q": "implement PKCE ใน React ยังไง?",
-          "a": "<p>ใช้ lib เช่น <code>oidc-client-ts</code> จัดการ verifier/challenge/redirect/refresh ให้หมด ไม่ต้องเขียน crypto เอง config issuer, client_id, redirect_uri, scope แล้วมันดูแล flow ให้</p>"
-        }
-      ]
-    },
-    {
-      "id": "s4",
-      "num": "04",
+      "id": "s5",
+      "num": "05",
       "title": "ory/fosite",
       "tag": { "class": "must", "label": "ต้องเตรียม" },
       "items": [
@@ -97,49 +149,9 @@
       ]
     },
     {
-      "id": "s5",
-      "num": "05",
-      "title": "RBAC vs ABAC",
-      "tag": { "class": "strong", "label": "จุดแข็ง" },
-      "items": [
-        {
-          "q": "ต่างกันยังไง เลือกใช้ตอนไหน?",
-          "a": "<ul><li><b>RBAC</b> — สิทธิ์ตาม role (admin/user/manager) ง่าย เหมาะสิทธิ์ตายตัว</li><li><b>ABAC</b> — สิทธิ์ตาม attribute (แผนก เวลา เจ้าของข้อมูล) ยืดหยุ่น เช่น \"แก้ได้เฉพาะเอกสารแผนกตัวเอง ในเวลาทำการ\"</li><li>จริงมักใช้ผสม: RBAC เป็นฐาน + ABAC เสริมเงื่อนไข</li></ul>"
-        },
-        {
-          "q": "ออกแบบ permission system ยังไง?",
-          "a": "<p>แยก user → role → permission (many-to-many) เก็บใน DB สำหรับ ABAC ใช้ policy engine (เช่น CEL) eval เงื่อนไขตอน runtime cache permission ไว้ลด query</p>"
-        },
-        {
-          "q": "policy engine (CEL) ช่วยอะไร?",
-          "a": "<p>เขียน rule เป็น expression เก็บใน DB แก้ได้โดยไม่ต้อง deploy code ใหม่ เช่น <code>user.dept == resource.dept &amp;&amp; request.time.hour &lt; 18</code></p>"
-        }
-      ]
-    },
-    {
       "id": "s6",
       "num": "06",
-      "title": "JWT",
-      "tag": null,
-      "items": [
-        {
-          "q": "JWT ปลอดภัยแค่ไหน? ใส่อะไรได้บ้าง?",
-          "a": "<p>JWT แค่ <b>signed ไม่ได้ encrypt</b> ใครก็ decode อ่าน payload ได้ ห้ามใส่ข้อมูล sensitive (password, เลขบัตร) ที่ปลอดภัยคือ \"แก้ไม่ได้\" เพราะ signature</p>"
-        },
-        {
-          "q": "ยกเลิก JWT ก่อนหมดอายุยังไง?",
-          "a": "<p>JWT stateless ยกเลิกตรงๆ ไม่ได้ วิธีแก้:</p><ul><li>blocklist ใน Redis (เก็บ jti ที่ถูก revoke)</li><li>token version ใน DB (เปลี่ยน version = token เก่าใช้ไม่ได้)</li><li>ตั้ง expiry สั้น + ใช้ refresh token</li></ul>"
-        },
-        {
-          "q": "JWT signature มีกี่แบบ?",
-          "a": "<ul><li>HS256 — symmetric ใช้ secret เดียว sign/verify เหมาะระบบเดียว</li><li>RS256 — asymmetric sign ด้วย private key verify ด้วย public key เหมาะหลาย service</li></ul>"
-        }
-      ]
-    },
-    {
-      "id": "s7",
-      "num": "07",
-      "title": "MongoDB / GORM",
+      "title": "MongoDB / GORM / HTTP client",
       "tag": { "class": "must", "label": "brush up" },
       "items": [
         {
@@ -153,12 +165,16 @@
         {
           "q": "GORM มีข้อควรระวังอะไร?",
           "a": "<ul><li>N+1 query — ใช้ <code>Preload</code> โหลด relation ทีเดียว</li><li>ระวัง auto-migration ใน production</li><li>ใช้ <code>Select</code> เลือก column ที่ต้องใช้ ไม่ดึงทั้ง table</li><li>transaction ใช้ <code>db.Transaction(func(tx))</code></li></ul>"
+        },
+        {
+          "q": "เรียก external API จาก Go (HTTP client) ยังไง?",
+          "a": "<p>ใช้ <code>net/http</code>: reuse <code>http.Client</code> ตัวเดียว (อย่าสร้างใหม่ทุก request), ตั้ง <code>Timeout</code>, ส่ง <code>context</code> ด้วย <code>http.NewRequestWithContext</code>, <code>defer resp.Body.Close()</code> เสมอ, จัดการ retry/backoff เมื่อ fail</p>"
         }
       ]
     },
     {
-      "id": "s8",
-      "num": "08",
+      "id": "s7",
+      "num": "07",
       "title": "Testing",
       "tag": null,
       "items": [
@@ -167,15 +183,63 @@
           "a": "<p>Table-driven test — เก็บ test case เป็น slice ของ struct แล้ว loop ผ่าน <code>t.Run()</code> อ่านง่าย เพิ่ม case ง่าย ใช้ <code>testify/assert</code> ช่วย assert</p>"
         },
         {
+          "q": "testify กับ ginkgo ต่างกันยังไง?",
+          "a": "<ul><li><b>testify</b> — assertion + mock lib ใช้กับ <code>testing</code> มาตรฐาน + table-driven เขียนง่าย ตรงไปตรงมา</li><li><b>ginkgo</b> — BDD framework (<code>Describe</code>/<code>Context</code>/<code>It</code>) คู่กับ <code>gomega</code> เหมาะ test ที่อยากอ่านเป็นสเปค เลือกตาม convention ทีม</li></ul>"
+        },
+        {
           "q": "mock dependency ยังไง?",
           "a": "<p>ออกแบบเป็น interface แล้ว inject mock ตอน test (clean architecture ช่วยตรงนี้ — repository เป็น interface, service รับ interface)</p>"
         }
       ]
     },
     {
+      "id": "s8",
+      "num": "08",
+      "title": "ACL / RBAC / ABAC",
+      "tag": { "class": "strong", "label": "จุดแข็ง" },
+      "items": [
+        {
+          "q": "ACL คืออะไร ต่างจาก RBAC ยังไง?",
+          "a": "<p><b>ACL</b> (Access Control List) = ผูกสิทธิ์กับ resource รายตัว — \"user X ทำ action Y บน resource Z ได้ไหม\" ตรงไปตรงมา fine-grained per-object แต่ scale ยากเมื่อ user/resource เยอะ (entry บานปลาย) RBAC จัดกลุ่มด้วย role เลยลด entry ลง</p>"
+        },
+        {
+          "q": "RBAC กับ ABAC ต่างกันยังไง เลือกใช้ตอนไหน?",
+          "a": "<ul><li><b>RBAC</b> — สิทธิ์ตาม role (admin/user/manager) ง่าย เหมาะสิทธิ์ตายตัว</li><li><b>ABAC</b> — สิทธิ์ตาม attribute (แผนก เวลา เจ้าของข้อมูล) ยืดหยุ่น เช่น \"แก้ได้เฉพาะเอกสารแผนกตัวเอง ในเวลาทำการ\"</li><li>จริงมักใช้ผสม: RBAC เป็นฐาน + ABAC เสริมเงื่อนไข</li></ul>"
+        },
+        {
+          "q": "ออกแบบ permission system ยังไง?",
+          "a": "<p>แยก user → role → permission (many-to-many) เก็บใน DB สำหรับ ABAC ใช้ policy engine (เช่น CEL) eval เงื่อนไขตอน runtime cache permission ไว้ลด query</p>"
+        },
+        {
+          "q": "policy engine (CEL) ช่วยอะไร?",
+          "a": "<p>เขียน rule เป็น expression เก็บใน DB แก้ได้โดยไม่ต้อง deploy code ใหม่ เช่น <code>user.dept == resource.dept &amp;&amp; request.time.hour &lt; 18</code></p>"
+        }
+      ]
+    },
+    {
       "id": "s9",
       "num": "09",
-      "title": "Behavioral",
+      "title": "JWT",
+      "tag": null,
+      "items": [
+        {
+          "q": "JWT ปลอดภัยแค่ไหน? ใส่อะไรได้บ้าง?",
+          "a": "<p>JWT แค่ <b>signed ไม่ได้ encrypt</b> ใครก็ decode อ่าน payload ได้ ห้ามใส่ข้อมูล sensitive (password, เลขบัตร) ที่ปลอดภัยคือ \"แก้ไม่ได้\" เพราะ signature (ใน Go ใช้ <code>golang-jwt/jwt</code>)</p>"
+        },
+        {
+          "q": "ยกเลิก JWT ก่อนหมดอายุยังไง?",
+          "a": "<p>JWT stateless ยกเลิกตรงๆ ไม่ได้ วิธีแก้:</p><ul><li>blocklist ใน Redis (เก็บ jti ที่ถูก revoke)</li><li>token version ใน DB (เปลี่ยน version = token เก่าใช้ไม่ได้)</li><li>ตั้ง expiry สั้น + ใช้ refresh token</li></ul>"
+        },
+        {
+          "q": "JWT signature มีกี่แบบ?",
+          "a": "<ul><li>HS256 — symmetric ใช้ secret เดียว sign/verify เหมาะระบบเดียว</li><li>RS256 — asymmetric sign ด้วย private key verify ด้วย public key เหมาะหลาย service</li></ul>"
+        }
+      ]
+    },
+    {
+      "id": "s10",
+      "num": "10",
+      "title": "Behavioral — สายอาชีพ",
       "tag": null,
       "items": [
         {
@@ -197,9 +261,9 @@
       ]
     },
     {
-      "id": "s10",
-      "num": "10",
-      "title": "จิตวิทยา / Behavioral",
+      "id": "s11",
+      "num": "11",
+      "title": "จิตวิทยา / มินด์เซ็ต",
       "tag": { "class": "strong", "label": "มินด์เซ็ต" },
       "items": [
         {
@@ -240,7 +304,7 @@
         },
         {
           "q": "ทำไมเราถึงควรรับคุณ?",
-          "a": "<p>อย่าถ่อมตัวเกิน สรุป 2-3 จุดที่ match JD: Go เป็น stack หลัก + PostgreSQL + ทำ full-stack ได้ + มี testing discipline</p>"
+          "a": "<p>อย่าถ่อมตัวเกิน สรุป 2-3 จุดที่ match JD: Go เป็น stack หลัก + PostgreSQL + ทำ full-stack (React) ได้ + มี testing discipline</p>"
         },
         {
           "q": "คาดหวังเงินเดือนเท่าไหร่?",
@@ -265,8 +329,8 @@
       ]
     },
     {
-      "id": "s11",
-      "num": "11",
+      "id": "s12",
+      "num": "12",
       "title": "คำถามที่ถามกลับ",
       "tag": { "class": "strong", "label": "ถามกลับ" },
       "items": [
@@ -276,7 +340,7 @@
         },
         {
           "q": "เกี่ยวกับงานที่จะทำจริง (ถามก่อน — ดูตั้งใจสุด)",
-          "a": "<ul><li>ตำแหน่งนี้ได้ทำส่วนไหน — <b>SG Finance+</b> / <b>SG Finance Application</b> / ระบบหลังบ้าน?</li><li>ทีมใช้ Go เป็นหลัก หรือกำลัง migrate จาก C#/.NET? สัดส่วน Go vs C# เท่าไหร่</li><li>งาน 3 เดือนแรกคาดหวังให้ทำอะไร (ดูว่าเขามีภาพชัดไหม)</li></ul>"
+          "a": "<ul><li>ตำแหน่งนี้ได้ทำ product/ระบบไหน — frontend, backend หรือระบบหลังบ้าน?</li><li>ทีมใช้ Go เป็นหลัก หรือกำลัง migrate จาก stack อื่น? สัดส่วนงานเท่าไหร่</li><li>งาน 3 เดือนแรกคาดหวังให้ทำอะไร (ดูว่าเขามีภาพชัดไหม)</li></ul>"
         },
         {
           "q": "เกี่ยวกับทีม / วิธีทำงาน",
@@ -304,7 +368,8 @@
   "recap": {
     "title": "จุดที่ต้องเตรียมหนักสุด",
     "items": [
-      "<b>PKCE flow ใน React</b> — flow + เหตุผล + เก็บ token ที่ไหน",
+      "<b>React frontend</b> — hooks, state management (Redux/Zustand/Context), router, API integration",
+      "<b>PKCE flow ใน React</b> — flow + เหตุผล + เก็บ token + secure redirect + refresh",
       "<b>ory/fosite</b> — client vs server, ต้อง implement storage เอง",
       "<b>mongo-driver</b> — CRUD พื้นฐาน + เลือกใช้ตอนไหน",
       "<b>จิตวิทยา / Behavioral</b> — ตอบด้วย STAR, จริงใจ, เตรียมคำถามถามกลับ 3-5 ข้อ"
