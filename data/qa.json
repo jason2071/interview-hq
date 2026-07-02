@@ -12,7 +12,7 @@
         },
         {
           "q": "จัดการ state ข้าม component เลือกอะไร?",
-          "a": "<ul><li><b>Redux</b> — app ใหญ่/ซับซ้อน มี devtools + middleware (Redux Toolkit ลด boilerplate) เหมาะ state ที่หลายที่ใช้ร่วม</li><li><b>Zustand</b> — เบา API ง่าย ไม่ต้อง provider/boilerplate เหมาะ-medium app</li><li><b>Context API</b> — built-in เหมาะ state เปลี่ยนไม่บ่อย (theme, auth, locale) ระวัง re-render ทั้ง tree ถ้า value เปลี่ยนบ่อย</li></ul>"
+          "a": "<ul><li><b>Redux</b> — app ใหญ่/ซับซ้อน มี devtools + middleware (Redux Toolkit ลด boilerplate) เหมาะ state ที่หลายที่ใช้ร่วม</li><li><b>Zustand</b> — เบา API ง่าย ไม่ต้อง provider/boilerplate เหมาะ app ขนาดกลาง</li><li><b>Context API</b> — built-in เหมาะ state เปลี่ยนไม่บ่อย (theme, auth, locale) ระวัง re-render ทั้ง tree ถ้า value เปลี่ยนบ่อย</li></ul>"
         },
         {
           "q": "React Router ใช้ทำอะไร?",
