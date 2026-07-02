@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ซ้อมสัมภาษณ์ Software Engineer — HQ Core System: Go Fiber, OAuth/PKCE, ory/fosite, RBAC/ABAC, JWT, MongoDB/GORM, Testing, จิตวิทยาสัมภาษณ์">
+<title>Mock Interview — HQ Core System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<!-- Mobile-only: opens the sidebar drawer -->
+<button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="sidebar" aria-label="เปิดสารบัญ">☰ สารบัญ</button>
+<div class="overlay" id="overlay"></div>
+
+<header>
+  <div class="eyebrow">Interview Prep</div>
+  <h1>Software Engineer — HQ Core System</h1>
+  <p>คำถาม-คำตอบซ้อมสัมภาษณ์ · กดที่คำถามเพื่อดูเฉลย</p>
+  <div class="toolbar">
+    <button class="btn" id="expandAll">เปิดทั้งหมด</button>
+    <button class="btn" id="collapseAll">ปิดทั้งหมด</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <aside class="sidebar" id="sidebar">
+    <p class="sidebar-title">สารบัญ</p>
+    <!-- Links rendered by app.js from data.json -->
+    <nav class="toc" id="toc" aria-label="สารบัญ"></nav>
+  </aside>
+
+  <div class="wrap">
+    <!-- Sections and recap rendered by app.js from data.json -->
+    <main id="qa"></main>
+    <div class="recap" id="recap"></div>
+    <footer>ซ้อมโดยปิดคำตอบก่อน แล้วค่อยกดเฉลย · Good luck 🍀</footer>
+  </div>
+
+</div>
+
+<script src="assets/js/app.js" defer></script>
+
+</body>
+</html>

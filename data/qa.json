@@ -1,0 +1,240 @@
+{
+  "sections": [
+    {
+      "id": "s1",
+      "num": "01",
+      "title": "Go Fiber",
+      "tag": null,
+      "items": [
+        {
+          "q": "Fiber ต่างจาก net/http ยังไง?",
+          "a": "<p>Fiber build บน <code>fasthttp</code> ไม่ใช่ <code>net/http</code> เลยเร็วกว่าและ memory น้อยกว่า จุดสำคัญ: <code>*fiber.Ctx</code> ถูก reuse ระหว่าง request ห้ามเก็บ reference ไปใช้นอก handler เพราะข้อมูลจะถูกเขียนทับ ถ้าจะเก็บต้อง copy ค่าออกมาก่อน</p>"
+        },
+        {
+          "q": "Middleware ทำงานยังไง?",
+          "a": "<p>เป็น chain เรียงกัน แต่ละตัวเรียก <code>c.Next()</code> เพื่อส่งต่อ ถ้าไม่เรียก = หยุด chain (เช่น auth ไม่ผ่าน return เลย) ใส่ได้ทั้ง global (<code>app.Use</code>) และเฉพาะ route</p>"
+        },
+        {
+          "q": "จัดการ error ใน Fiber ยังไง?",
+          "a": "<p>return <code>error</code> จาก handler แล้วใช้ custom <code>ErrorHandler</code> กลางจับทั้งหมด ทำให้ error format เหมือนกันทั้ง API ไม่ต้อง <code>c.Status().JSON()</code> ซ้ำทุกที่</p>"
+        },
+        {
+          "q": "จูน performance Fiber ยังไง?",
+          "a": "<p>เปิด <code>Prefork</code> (หลาย process), ใช้ compression middleware, ตั้ง <code>BodyLimit</code>, เลี่ยง allocate เกินใน hot path, จูน connection pool ของ DB</p>"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "num": "02",
+      "title": "Go Ecosystem",
+      "tag": null,
+      "items": [
+        {
+          "q": "Error handling แบบ Go ที่ดีเป็นยังไง?",
+          "a": "<p>เช็ค <code>if err != nil</code> ทันที, wrap ด้วย <code>fmt.Errorf(\"...: %w\", err)</code> เพื่อเก็บ context, ใช้ <code>errors.Is</code> / <code>errors.As</code> เช็ค type แทนเทียบ string อย่า panic กับ error ปกติ</p>"
+        },
+        {
+          "q": "context.Context ใช้ทำอะไร?",
+          "a": "<p>ส่ง cancellation, timeout, deadline และ request-scoped value ข้าม layer เช่น ตั้ง timeout query DB หรือยกเลิกงานเมื่อ client ตัดการเชื่อมต่อ ควรรับ <code>ctx</code> เป็น parameter ตัวแรกเสมอ</p>"
+        },
+        {
+          "q": "goroutine leak เกิดจากอะไร ป้องกันยังไง?",
+          "a": "<p>เกิดเมื่อ goroutine รอ channel ที่ไม่มีวันได้ค่า หรือไม่มีทางออก ป้องกันด้วย <code>context</code> cancel, ปิด channel ให้ถูก, ใช้ <code>sync.WaitGroup</code> รอให้จบ</p>"
+        },
+        {
+          "q": "slice กับ array ต่างกันยังไง?",
+          "a": "<p>array ขนาดคงที่ (เป็นส่วนหนึ่งของ type), slice เป็น view ชี้ไป underlying array มี len/cap ขยายด้วย <code>append</code> ระวัง: หลาย slice อาจ share array เดียวกัน แก้ตัวนึงกระทบอีกตัว</p>"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "num": "03",
+      "title": "OAuth 2.0 / PKCE",
+      "tag": { "class": "must", "label": "ต้องเตรียม" },
+      "items": [
+        {
+          "q": "Authorization Code flow ทำงานยังไง?",
+          "a": "<p>User → auth server → login → ได้ <code>code</code> กลับมา (ผ่าน redirect) → frontend เอา code ไปแลก <code>access_token</code> ที่ token endpoint แยก 2 ขั้นเพื่อไม่ให้ token โผล่บน URL</p>"
+        },
+        {
+          "q": "PKCE คืออะไร แก้ปัญหาอะไร?",
+          "a": "<p>SPA เก็บ <code>client_secret</code> ไม่ได้เพราะโค้ดอยู่ใน browser ทุกคนอ่านได้ PKCE แก้ด้วย:</p><ul><li>client สุ่ม <code>code_verifier</code> → hash (SHA256) เป็น <code>code_challenge</code> ส่งตอนขอ code</li><li>ตอนแลก token ส่ง <code>code_verifier</code> ตัวจริง</li><li>server เทียบ hash ตรงกันไหม</li></ul><p>ป้องกันคนดัก <code>code</code> เอาไปแลก token เพราะไม่มี verifier</p>"
+        },
+        {
+          "q": "เก็บ token ที่ไหนใน browser ปลอดภัยสุด?",
+          "a": "<ul><li><code>localStorage</code> — เสี่ยง XSS (JS อ่านได้)</li><li><code>httpOnly cookie</code> — JS อ่านไม่ได้ ปลอดภัยกว่า แต่เสี่ยง CSRF ต้องมี SameSite</li><li>นิยม: access token ใน memory + refresh token ใน httpOnly cookie</li></ul>"
+        },
+        {
+          "q": "access token กับ refresh token ต่างกันยังไง?",
+          "a": "<ul><li>access token — อายุสั้น (นาที) ใช้เรียก API</li><li>refresh token — อายุยาว ใช้ขอ access token ใหม่โดยไม่ต้อง login ซ้ำ</li></ul>"
+        },
+        {
+          "q": "implement PKCE ใน React ยังไง?",
+          "a": "<p>ใช้ lib เช่น <code>oidc-client-ts</code> จัดการ verifier/challenge/redirect/refresh ให้หมด ไม่ต้องเขียน crypto เอง config issuer, client_id, redirect_uri, scope แล้วมันดูแล flow ให้</p>"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "num": "04",
+      "title": "ory/fosite",
+      "tag": { "class": "must", "label": "ต้องเตรียม" },
+      "items": [
+        {
+          "q": "fosite ต่างจาก golang.org/x/oauth2 ยังไง?",
+          "a": "<ul><li><code>x/oauth2</code> = <b>client</b> เราไปขอ token จาก provider อื่น (Google, Keycloak)</li><li><code>fosite</code> = <b>server/provider</b> เราออก token เอง เป็น OAuth server เอง</li></ul>"
+        },
+        {
+          "q": "ทำไมต้องใช้ fosite ไม่ใช้ Keycloak?",
+          "a": "<p>ถ้าต้องการคุม flow เอง ฝัง OAuth server ในแอป หรือมี business logic เฉพาะที่ Keycloak ทำไม่ได้ แต่แลกมาด้วย config ที่ซับซ้อนและต้อง implement <code>Storage</code> interface เอง (เก็บ client, token, code)</p>"
+        },
+        {
+          "q": "fosite ต้องเขียนอะไรเองบ้าง?",
+          "a": "<p>implement storage layer เอง (เก็บใน PostgreSQL/Redis), กำหนด strategy (JWT หรือ opaque token), config grant type ที่รองรับ fosite เน้น security by default แต่ต้อง wire เยอะ</p><div class=\"note\">ถ้าไม่เคยใช้จริง ตอบตรงๆ: \"เข้าใจว่ามันคือ OAuth provider library ที่ต้อง implement storage เอง แต่ยังไม่เคยใช้ production พร้อมเรียนรู้\"</div>"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "num": "05",
+      "title": "RBAC vs ABAC",
+      "tag": { "class": "strong", "label": "จุดแข็ง" },
+      "items": [
+        {
+          "q": "ต่างกันยังไง เลือกใช้ตอนไหน?",
+          "a": "<ul><li><b>RBAC</b> — สิทธิ์ตาม role (admin/user/manager) ง่าย เหมาะสิทธิ์ตายตัว</li><li><b>ABAC</b> — สิทธิ์ตาม attribute (แผนก เวลา เจ้าของข้อมูล) ยืดหยุ่น เช่น \"แก้ได้เฉพาะเอกสารแผนกตัวเอง ในเวลาทำการ\"</li><li>จริงมักใช้ผสม: RBAC เป็นฐาน + ABAC เสริมเงื่อนไข</li></ul>"
+        },
+        {
+          "q": "ออกแบบ permission system ยังไง?",
+          "a": "<p>แยก user → role → permission (many-to-many) เก็บใน DB สำหรับ ABAC ใช้ policy engine (เช่น CEL) eval เงื่อนไขตอน runtime cache permission ไว้ลด query</p>"
+        },
+        {
+          "q": "policy engine (CEL) ช่วยอะไร?",
+          "a": "<p>เขียน rule เป็น expression เก็บใน DB แก้ได้โดยไม่ต้อง deploy code ใหม่ เช่น <code>user.dept == resource.dept &amp;&amp; request.time.hour &lt; 18</code></p>"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "num": "06",
+      "title": "JWT",
+      "tag": null,
+      "items": [
+        {
+          "q": "JWT ปลอดภัยแค่ไหน? ใส่อะไรได้บ้าง?",
+          "a": "<p>JWT แค่ <b>signed ไม่ได้ encrypt</b> ใครก็ decode อ่าน payload ได้ ห้ามใส่ข้อมูล sensitive (password, เลขบัตร) ที่ปลอดภัยคือ \"แก้ไม่ได้\" เพราะ signature</p>"
+        },
+        {
+          "q": "ยกเลิก JWT ก่อนหมดอายุยังไง?",
+          "a": "<p>JWT stateless ยกเลิกตรงๆ ไม่ได้ วิธีแก้:</p><ul><li>blocklist ใน Redis (เก็บ jti ที่ถูก revoke)</li><li>token version ใน DB (เปลี่ยน version = token เก่าใช้ไม่ได้)</li><li>ตั้ง expiry สั้น + ใช้ refresh token</li></ul>"
+        },
+        {
+          "q": "JWT signature มีกี่แบบ?",
+          "a": "<ul><li>HS256 — symmetric ใช้ secret เดียว sign/verify เหมาะระบบเดียว</li><li>RS256 — asymmetric sign ด้วย private key verify ด้วย public key เหมาะหลาย service</li></ul>"
+        }
+      ]
+    },
+    {
+      "id": "s7",
+      "num": "07",
+      "title": "MongoDB / GORM",
+      "tag": { "class": "must", "label": "brush up" },
+      "items": [
+        {
+          "q": "เลือก MongoDB แทน PostgreSQL ตอนไหน?",
+          "a": "<ul><li>Mongo — schema ยืดหยุ่น, data nested/document, scale horizontal ง่าย, write เยอะ</li><li>Postgres — relation ชัด, ACID, JOIN ซับซ้อน, ต้องการ consistency สูง</li></ul>"
+        },
+        {
+          "q": "mongo-driver ใน Go ใช้ยังไงคร่าวๆ?",
+          "a": "<p><code>client.Database().Collection()</code> แล้วเรียก <code>InsertOne</code>, <code>Find</code>, <code>UpdateOne</code> ผลลัพธ์ decode เข้า struct ด้วย bson tag ใช้ <code>context</code> กับทุก operation</p>"
+        },
+        {
+          "q": "GORM มีข้อควรระวังอะไร?",
+          "a": "<ul><li>N+1 query — ใช้ <code>Preload</code> โหลด relation ทีเดียว</li><li>ระวัง auto-migration ใน production</li><li>ใช้ <code>Select</code> เลือก column ที่ต้องใช้ ไม่ดึงทั้ง table</li><li>transaction ใช้ <code>db.Transaction(func(tx))</code></li></ul>"
+        }
+      ]
+    },
+    {
+      "id": "s8",
+      "num": "08",
+      "title": "Testing",
+      "tag": null,
+      "items": [
+        {
+          "q": "เขียน test ใน Go แบบไหน?",
+          "a": "<p>Table-driven test — เก็บ test case เป็น slice ของ struct แล้ว loop ผ่าน <code>t.Run()</code> อ่านง่าย เพิ่ม case ง่าย ใช้ <code>testify/assert</code> ช่วย assert</p>"
+        },
+        {
+          "q": "mock dependency ยังไง?",
+          "a": "<p>ออกแบบเป็น interface แล้ว inject mock ตอน test (clean architecture ช่วยตรงนี้ — repository เป็น interface, service รับ interface)</p>"
+        }
+      ]
+    },
+    {
+      "id": "s9",
+      "num": "09",
+      "title": "Behavioral",
+      "tag": null,
+      "items": [
+        {
+          "q": "ทำไมอยากย้ายงาน?",
+          "a": "<p>โฟกัสที่การเติบโต: อยากทำระบบ core ที่ท้าทายขึ้น ใช้ stack ที่ถนัด (Go/Postgres) ในสเกลใหญ่ขึ้น เลี่ยงพูดลบเรื่องที่เดิม</p>"
+        },
+        {
+          "q": "เล่าปัญหา performance ที่เคยแก้?",
+          "a": "<p>เล่า Excel pipeline: ข้อมูลใหญ่จาก OBS → Go → PostgreSQL ใช้ batching + streaming แทนโหลดทั้งก้อนเข้า memory ลดเวลา/RAM ได้ชัดเจน</p>"
+        },
+        {
+          "q": "ทำงานกับ AI เยอะ ยังเขียนเองได้ไหม?",
+          "a": "<p>ตอบตรงๆ: ใช้ AI เร่งงานได้ แต่รักษาพื้นฐาน เลยทำ Go skill rebuild plan (Tour of Go, review เอง) เข้าใจโค้ดที่ส่งมอบทุกบรรทัด</p>"
+        },
+        {
+          "q": "จุดที่ยังไม่แข็ง?",
+          "a": "<p>เลือกพูดที่กำลังพัฒนาจริง เช่น frontend PKCE flow / fosite แล้วบอกว่ากำลังเรียนรู้อยู่ แสดง growth mindset</p>"
+        }
+      ]
+    },
+    {
+      "id": "s10",
+      "num": "10",
+      "title": "จิตวิทยาสัมภาษณ์",
+      "tag": { "class": "strong", "label": "มินด์เซ็ต" },
+      "items": [
+        {
+          "q": "ตื่นเต้น/ประหม่าตอนสัมภาษณ์ จัดการยังไง?",
+          "a": "<p>ซ้อมตอบดังๆ ล่วงหน้าให้คุ้นปาก, หายใจเข้าลึกช้าๆ ก่อนเข้าห้อง, reframe ความตื่นเต้นเป็น \"พลังงาน\" ไม่ใช่ความกลัว, พูดช้าลง จิบน้ำเพื่อเว้นจังหวะคิด</p>"
+        },
+        {
+          "q": "สร้าง first impression ยังไงใน 30 วินาทีแรก?",
+          "a": "<ul><li>ยิ้ม + eye contact + ทักทายชัดเจน</li><li>นั่งหลังตรง ท่าทางเปิด (ไม่กอดอก)</li><li>พลังงานบวก กระตือรือร้น</li><li>มาก่อนเวลา 5-10 นาที</li></ul>"
+        },
+        {
+          "q": "เจอคำถามที่ไม่รู้คำตอบ ทำยังไง?",
+          "a": "<p>อย่ามั่ว ยอมรับตรงๆ ว่ายังไม่เคยเจอ แล้ว<b>โชว์วิธีคิด</b>: จะหาคำตอบยังไง, โยงกับสิ่งที่รู้ใกล้เคียง interviewer สนใจ reasoning มากกว่าคำตอบเป๊ะ</p>"
+        },
+        {
+          "q": "ตอบ behavioral question ด้วย STAR ยังไง?",
+          "a": "<ul><li><b>S</b>ituation — บริบทสั้นๆ</li><li><b>T</b>ask — หน้าที่/เป้าหมาย</li><li><b>A</b>ction — <b>สิ่งที่เราทำ</b> (เน้นตรงนี้ ใช้ \"ผม/ฉัน\" ไม่ใช่ \"ทีม\")</li><li><b>R</b>esult — ผลลัพธ์วัดได้ (มีตัวเลข %)</li></ul>"
+        },
+        {
+          "q": "เจรจาเงินเดือนยังไง?",
+          "a": "<p>รู้ market rate ก่อน, เลี่ยงเปิดตัวเลขคนแรกถ้าทำได้, ตอบเป็น<b>ช่วง (range)</b> ที่พอใจ, เจรจาจาก value ที่ให้บริษัท ไม่ใช่ need ส่วนตัว, ความเงียบหลังยื่นข้อเสนอเป็นเครื่องมือ อย่ารีบพูดแทรก</p>"
+        },
+        {
+          "q": "\"มีคำถามอะไรอยากถามเราไหม?\" ตอบยังไง?",
+          "a": "<p>เตรียมคำถามไป 2-3 ข้อเสมอ การไม่มีคำถาม = ดูไม่สนใจงาน ถามเรื่อง team culture, tech challenge, ความคาดหวัง 3-6 เดือนแรก, path การเติบโต เลี่ยงถามแต่เรื่องวันลา/สวัสดิการ</p>"
+        }
+      ]
+    }
+  ],
+  "recap": {
+    "title": "จุดที่ต้องเตรียมหนักสุด",
+    "items": [
+      "<b>PKCE flow ใน React</b> — flow + เหตุผล + เก็บ token ที่ไหน",
+      "<b>ory/fosite</b> — client vs server, ต้อง implement storage เอง",
+      "<b>mongo-driver</b> — CRUD พื้นฐาน + เลือกใช้ตอนไหน"
+    ]
+  }
+}
