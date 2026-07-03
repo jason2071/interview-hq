@@ -15,53 +15,69 @@ async function init() {
     return;
   }
 
-  renderTOC(data.sections);
-  renderSections(data.sections);
+  renderTOC(data.groups);
+  renderSections(data.groups);
   renderRecap(data.recap);
   wireToolbar();
   setupDrawer();
   setupScrollSpy();
 }
 
-function renderTOC(sections) {
+function renderTOC(groups) {
   const toc = document.getElementById('toc');
-  for (const s of sections) {
-    const a = document.createElement('a');
-    a.href = '#' + s.id;
-    a.textContent = s.title;
-    toc.append(a);
+  for (const g of groups) {
+    const label = document.createElement('div');
+    label.className = 'toc-group';
+    label.textContent = g.title;
+    toc.append(label);
+
+    for (const s of g.sections) {
+      const a = document.createElement('a');
+      a.href = '#' + s.id;
+      a.textContent = s.title;
+      toc.append(a);
+    }
   }
 }
 
-function renderSections(sections) {
+function renderSections(groups) {
   const root = document.getElementById('qa');
-  for (const s of sections) {
-    const section = document.createElement('section');
-    section.id = s.id;
+  for (const g of groups) {
+    const groupHead = document.createElement('div');
+    groupHead.className = 'group-head';
+    groupHead.textContent = g.title;
+    root.append(groupHead);
 
-    const head = document.createElement('div');
-    head.className = 'sec-head';
-
-    const num = document.createElement('span');
-    num.className = 'sec-num';
-    num.textContent = s.num;
-
-    const h2 = document.createElement('h2');
-    h2.textContent = s.title;
-
-    head.append(num, h2);
-
-    if (s.tag) {
-      const tag = document.createElement('span');
-      tag.className = 'tag ' + s.tag.class;
-      tag.textContent = s.tag.label;
-      head.append(tag);
-    }
-
-    section.append(head);
-    for (const item of s.items) section.append(buildCard(item));
-    root.append(section);
+    for (const s of g.sections) root.append(buildSection(s));
   }
+}
+
+function buildSection(s) {
+  const section = document.createElement('section');
+  section.id = s.id;
+
+  const head = document.createElement('div');
+  head.className = 'sec-head';
+
+  const num = document.createElement('span');
+  num.className = 'sec-num';
+  num.textContent = s.num;
+
+  const h2 = document.createElement('h2');
+  h2.textContent = s.title;
+
+  head.append(num, h2);
+
+  if (s.tag) {
+    const tag = document.createElement('span');
+    tag.className = 'tag ' + s.tag.class;
+    tag.textContent = s.tag.label;
+    head.append(tag);
+  }
+
+  section.append(head);
+  for (const item of s.items) section.append(buildCard(item));
+  return section;
 }
 
 function buildCard(item) {

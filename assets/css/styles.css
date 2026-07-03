@@ -44,6 +44,21 @@ code, .mono{font-family:'IBM Plex Mono',monospace;font-size:.9em}
   font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
   color:var(--muted);font-weight:600;margin:0 0 10px;padding:0 12px;
 }
+.toc-group{
+  font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);font-weight:700;
+  margin:16px 0 4px;padding:0 12px;
+}
+.toc-group:first-of-type{margin-top:4px}
+
+/* Group banner between the two content groups */
+.group-head{
+  margin:44px 0 20px;padding:14px 20px;
+  background:var(--accent);color:#fff;
+  border-radius:var(--radius);
+  font-size:1.05rem;font-weight:700;letter-spacing:.01em;
+}
+.group-head:first-child{margin-top:8px}
 .wrap{flex:1 1 auto;min-width:0;max-width:820px;padding:0 0 80px}
 
 /* Mobile drawer controls (hidden on desktop) */
